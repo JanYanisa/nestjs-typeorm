@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -31,8 +32,19 @@ export class ItemsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.update(+id, updateItemDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateItemDto: UpdateItemDto,
+    @Query('isUpdateBubdle') isUpdateBubdle: string,
+  ) {
+    if (
+      isUpdateBubdle === undefined ||
+      isUpdateBubdle.trim() === '' ||
+      isUpdateBubdle !== 'true'
+    ) {
+      return this.itemsService.update(+id, updateItemDto);
+    }
+    return this.itemsService.updateBundle(+id, updateItemDto);
   }
 
   @Delete(':id')

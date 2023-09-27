@@ -65,21 +65,24 @@ export class ItemsService {
     );
     item.comments = comments;
     await this.entityManager.save(item);
-
-    // await this.entityManager.transaction(async (entityManager) => {
-    //   const item = await this.itemsRepository.findOneBy({ id });
-    //   item.public = updateItemDto.public;
-    //   // const comments = updateItemDto.comments.map(
-    //   //   (createCommentDto) => new Comment(createCommentDto),
-    //   // );
-    //   // item.comments = comments;
-    //   await entityManager.save(item);
-    //   const tagContent = `${Math.random()}`;
-    //   const tag = new Tag({ content: tagContent });
-    //   await entityManager.save(tag);
-    // });
   }
 
+  async updateBundle(id: number, updateItemDto: UpdateItemDto) {
+    await this.entityManager.transaction(async (entityManager) => {
+      const item = await this.itemsRepository.findOneBy({ id });
+      item.public = updateItemDto.public;
+      const comments = updateItemDto.comments.map(
+        (createCommentDto) => new Comment(createCommentDto),
+      );
+      item.comments = comments;
+      await entityManager.save(item);
+
+      throw new Error('Error in updateBundle'); // to test rollback the already saved item
+      const tagContent = `${Math.random()}`;
+      const tag = new Tag({ content: tagContent });
+      await entityManager.save(tag);
+    });
+  }
   async remove(id: number) {
     await this.itemsRepository.delete(id);
   }
