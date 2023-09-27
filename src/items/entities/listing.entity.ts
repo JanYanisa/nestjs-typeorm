@@ -1,11 +1,11 @@
-import { Column, Entity } from 'typeorm';
-import { AbstractEntity } from '../../database/abstract.entity';
+// import { Column, Entity } from 'typeorm';
+// import { AbstractEntity } from '../../database/abstract.entity';
 
-@Entity()
-export class Listing extends AbstractEntity<Listing> {
-  @Column()
-  description: string;
+// @Entity()
+// export class Listing extends AbstractEntity<Listing> {
+//   @Column()
+//   description: string;
 
-  @Column()
-  rating: number;
-}
+//   @Column()
+//   rating: number;
+// }
