@@ -2,15 +2,15 @@ import {
   Column,
   Entity,
   JoinColumn,
-  // JoinTable,
-  // ManyToMany,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Listing } from './listing.entity';
 import { Comment } from './comment.entity';
-// import { Tag } from './tag.entity';
+import { Tag } from './tag.entity';
 
 @Entity()
 export class Item {
@@ -30,11 +30,11 @@ export class Item {
   @OneToMany(() => Comment, (comment) => comment.item, { cascade: true }) // cascade: true means that you can create a comment and an item at the same time
   comments: Comment[];
 
+  @ManyToMany(() => Tag, { cascade: true })
+  @JoinTable()
+  tags: Tag[];
+
   constructor(item: Partial<Item>) {
     Object.assign(this, item);
   }
-
-  // @ManyToMany(() => Tag, { cascade: true })
-  // @JoinTable()
-  // tags: Tag[];
 }

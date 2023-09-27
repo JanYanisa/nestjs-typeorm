@@ -6,7 +6,7 @@ import { Item } from './entities/item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
 import { Comment } from './entities/comment.entity';
-// import { Tag } from './entities/tag.entity';
+import { Tag } from './entities/tag.entity';
 
 @Injectable()
 export class ItemsService {
@@ -22,13 +22,14 @@ export class ItemsService {
       ...createItemDto.listing,
       rating: 0,
     });
-    // const tags = createItemDto.tags.map(
-    //   (createTagDto) => new Tag(createTagDto),
-    // );
+    const tags = createItemDto.tags.map(
+      // need to create a tag object to pass into item, if not Tag entity will not be created, which results in TagDB not updated
+      (createTagDto) => new Tag(createTagDto),
+    );
     const item = new Item({
       ...createItemDto,
       comments: [],
-      // tags,
+      tags,
       listing,
     });
     await this.entityManager.save(item);
@@ -39,6 +40,7 @@ export class ItemsService {
       relations: {
         listing: true, //to populate listing
         // comments: true, //can also populate comments
+        // tags: true, //to populate tags
       },
     });
   }
@@ -49,7 +51,7 @@ export class ItemsService {
       relations: {
         listing: true, //to populate listing
         comments: true, //to populate comments
-        //   tags: true
+        tags: true, //to populate tags
       },
     });
   }
