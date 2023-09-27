@@ -4,7 +4,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Item } from './entities/item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { Listing } from './entities/listing.entity';
+import { Listing } from './entities/listing.entity';
 // import { Comment } from './entities/comment.entity';
 // import { Tag } from './entities/tag.entity';
 
@@ -17,10 +17,10 @@ export class ItemsService {
   ) {}
 
   async create(createItemDto: CreateItemDto) {
-    // const listing = new Listing({
-    //   ...createItemDto.listing,
-    //   rating: 0,
-    // });
+    const listing = new Listing({
+      ...createItemDto.listing,
+      rating: 0,
+    });
     // const tags = createItemDto.tags.map(
     //   (createTagDto) => new Tag(createTagDto),
     // );
@@ -28,21 +28,28 @@ export class ItemsService {
       ...createItemDto,
       // comments: [],
       // tags,
-      // listing,
+      listing,
     });
     await this.entityManager.save(item);
   }
 
   async findAll() {
-    return this.itemsRepository.find();
+    return this.itemsRepository.find({
+      relations: {
+        listing: true, //to populate listing
+      },
+    });
   }
 
   async findOne(id: number) {
-    // return this.itemsRepository.findOne({
-    //   where: { id },
-    //   relations: { listing: true, comments: true, tags: true },
-    // });
-    return this.itemsRepository.findOneBy({ id });
+    return this.itemsRepository.findOne({
+      where: { id },
+      relations: {
+        listing: true, //to populate listing
+        //  comments: true,
+        //   tags: true
+      },
+    });
   }
 
   async update(id: number, updateItemDto: UpdateItemDto) {

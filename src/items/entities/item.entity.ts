@@ -1,14 +1,14 @@
 import {
   Column,
   Entity,
-  // JoinColumn,
+  JoinColumn,
   // JoinTable,
   // ManyToMany,
   // OneToMany,
-  // OneToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-// import { Listing } from './listing.entity';
+import { Listing } from './listing.entity';
 // import { AbstractEntity } from '../../database/abstract.entity';
 // import { Comment } from './comment.entity';
 // import { Tag } from './tag.entity';
@@ -24,12 +24,13 @@ export class Item {
   @Column({ default: true })
   public: boolean;
 
+  @OneToOne(() => Listing, { cascade: true })
+  @JoinColumn()
+  listing: Listing;
+
   constructor(item: Partial<Item>) {
     Object.assign(this, item);
   }
-  // @OneToOne(() => Listing, { cascade: true })
-  // @JoinColumn()
-  // listing: Listing;
 
   // @OneToMany(() => Comment, (comment) => comment.item, { cascade: true })
   // comments: Comment[];
