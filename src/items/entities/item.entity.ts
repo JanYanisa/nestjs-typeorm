@@ -4,13 +4,12 @@ import {
   JoinColumn,
   // JoinTable,
   // ManyToMany,
-  // OneToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Listing } from './listing.entity';
-// import { AbstractEntity } from '../../database/abstract.entity';
-// import { Comment } from './comment.entity';
+import { Comment } from './comment.entity';
 // import { Tag } from './tag.entity';
 
 @Entity()
@@ -24,16 +23,16 @@ export class Item {
   @Column({ default: true })
   public: boolean;
 
-  @OneToOne(() => Listing, { cascade: true })
+  @OneToOne(() => Listing, { cascade: true }) // cascade: true means that you can create a listing and an item at the same time
   @JoinColumn()
   listing: Listing;
+
+  @OneToMany(() => Comment, (comment) => comment.item, { cascade: true }) // cascade: true means that you can create a comment and an item at the same time
+  comments: Comment[];
 
   constructor(item: Partial<Item>) {
     Object.assign(this, item);
   }
-
-  // @OneToMany(() => Comment, (comment) => comment.item, { cascade: true })
-  // comments: Comment[];
 
   // @ManyToMany(() => Tag, { cascade: true })
   // @JoinTable()
