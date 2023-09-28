@@ -6,7 +6,7 @@ export class PublicItems1687301066339 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     this.logger.log('Up');
-    await queryRunner.query('UPDATE item SET public = 1');
+    await queryRunner.query('UPDATE item SET public = 1'); //update all items to public
   }
 
   public async down(): Promise<void> {
